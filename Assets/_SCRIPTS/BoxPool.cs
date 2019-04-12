@@ -7,6 +7,7 @@ public class BoxPool : MonoBehaviour
     Vector3 startPos;
 
     public float newPackageInterval = 3f;
+    public float dropHeight = .1f;
     float _interval = 0f;
 
     [SerializeField]
@@ -18,7 +19,7 @@ public class BoxPool : MonoBehaviour
 
     private void Awake()
     {
-        startPos = new Vector3(0.049f, 1.048f, 0f);
+        startPos = new Vector3(0.049f, 1.048f + dropHeight, 0f);
         Instance = this;
         SpawnBox();
     }
