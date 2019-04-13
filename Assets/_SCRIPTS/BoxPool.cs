@@ -5,12 +5,13 @@ using UnityEngine;
 public class BoxPool : MonoBehaviour
 {
     Vector3 startPos;
-
+    SortedList<int, decimal> _priceList;
     public float newPackageInterval = 3f;
     public float dropHeight = .1f;
     float _interval = 0f;
+    public int NumBoxes = 10;
     PriceManager _priceManager;
-
+    decimal _total = 0;
     [SerializeField]
     private MoveBox _moveBoxPrefab;
 
@@ -20,6 +21,7 @@ public class BoxPool : MonoBehaviour
 
     private void Awake()
     {
+        _priceList = new SortedList<int, decimal>();
         _priceManager = gameObject.AddComponent<PriceManager>();
         startPos = new Vector3(0.049f, 1.048f + dropHeight, 0f);
         Instance = this;
@@ -57,8 +59,21 @@ public class BoxPool : MonoBehaviour
         }
     }
 
+    int _boxProcessedNo = 0;
+
     public void ReturnToPool(MoveBox box)
     {
+        _total += box.Price;
+        if (++_boxProcessedNo > NumBoxes)
+        {
+            printReceipt();
+            Destroy(box.gameObject);
+            _priceList.Clear();
+            _movingBoxes.Clear();
+            Application.Quit();
+            return;
+        }
+        _priceList.Add(_boxProcessedNo, box.Price);
         box.gameObject.SetActive(false);
         _movingBoxes.Enqueue(box);
     }
@@ -67,10 +82,29 @@ public class BoxPool : MonoBehaviour
     void SpawnBox()
     {
         boxCount++;
-        //=> Instantiate(_boxPrefab, startPos, Quaternion.identity);
+            
+
         MoveBox box = Get();
         box.transform.position = startPos;
         box.transform.rotation = Quaternion.identity;        
         box.gameObject.SetActive(true);
+    }
+
+    int itemNo = 1;
+    void printReceipt()
+    {
+        IList<decimal> prices = _priceList.Values;
+
+        print("=================");
+        print("PRICE LIST START");
+        print("=================");
+        foreach (var price in prices)
+        {
+            print($"Item No{itemNo++}: {price:C}");
+        }
+        print("=================");
+        print($"TOTAL PRICE {_total:C}");
+        print("=================");
+
     }
 }

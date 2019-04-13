@@ -11,6 +11,11 @@ public class MoveBox : MonoBehaviour
     Rigidbody _rb;
     public float _speed = 0.1f;
     Vector3 _move;
+    public int _maxDollars;
+    public int _maxQuarters;
+    public int _maxDimes;
+
+
     private void Awake()
     {
         
@@ -46,7 +51,7 @@ public class MoveBox : MonoBehaviour
 
     public void SetPrice()
     {
-        Price = (decimal)(Random.Range(1, 20) + Random.Range((float).01f, (float).99f));
+        Price = (decimal)(Random.Range(1, 23) + Random.Range((float).01f, (float).99f));
     }
 
 }
