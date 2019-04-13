@@ -1,13 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class MoveBox : MonoBehaviour
 {
+
+    public TextMeshPro _textMesh;
+    decimal _price;
     Rigidbody _rb;
-    public float _speed = 4f;
+    public float _speed = 0.1f;
     Vector3 _move;
-    bool boost = true;
     private void Awake()
     {
         
@@ -18,21 +21,32 @@ public class MoveBox : MonoBehaviour
     private void Update()
     {
 
-
-
         _rb.velocity = new Vector3(_speed, 0f);
-        //if (boost)
-        //{
-        //    _rb.AddForce(_move * _speed * Time.deltaTime);
-        //    boost = false;
-        //}
-        //else
-        //{
-        //    _rb.AddForce(_move * _speed * Time.deltaTime);
-        //}
-
-        print($"Velocity = {_rb.velocity}");
+        //print($"Velocity = {_rb.velocity}");
         
+    }
+
+    private void OnEnable()
+    {
+        SetPrice();
+    }
+
+    public decimal Price
+    {
+        set
+        {
+            _price = value;
+            _textMesh.text = $"{_price:C}";
+        }
+        get
+        {
+            return _price;
+        }
+    }
+
+    public void SetPrice()
+    {
+        Price = (decimal)(Random.Range(1, 20) + Random.Range((float).01f, (float).99f));
     }
 
 }
